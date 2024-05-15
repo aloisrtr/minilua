@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Uxn 101 - MiniLua</title>
+        <title>Constructing the CFG - MiniLua</title>
 
 
         <!-- Custom HTML head -->
@@ -12,21 +12,21 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon.svg">
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" href="highlight.css">
-        <link rel="stylesheet" href="tomorrow-night.css">
-        <link rel="stylesheet" href="ayu-highlight.css">
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
@@ -35,7 +35,7 @@
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
-            var path_to_root = "";
+            var path_to_root = "../";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
@@ -88,7 +88,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="lua101.html"><strong aria-hidden="true">1.1.</strong> Lua 101</a></li><li class="chapter-item expanded "><a href="uxn101.html" class="active"><strong aria-hidden="true">1.2.</strong> Uxn 101</a></li></ol></li><li class="chapter-item expanded "><a href="lab1/index.html"><strong aria-hidden="true">2.</strong> Lab 01: Parsing Lua</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="lab1/lua_syntax.html"><strong aria-hidden="true">2.1.</strong> Lua's syntax</a></li><li class="chapter-item expanded "><a href="lab1/implementing_parser.html"><strong aria-hidden="true">2.2.</strong> Implementing the grammar in LALRPOP</a></li><li class="chapter-item expanded "><a href="lab1/pretty_printer.html"><strong aria-hidden="true">2.3.</strong> Pretty printing our AST</a></li><li class="chapter-item expanded "><a href="lab1/end.html"><strong aria-hidden="true">2.4.</strong> End of Lab 01</a></li></ol></li><li class="chapter-item expanded "><a href="lab2/index.html"><strong aria-hidden="true">3.</strong> Lab 02: Intermediate representation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="lab2/control_flow_graph.html"><strong aria-hidden="true">3.1.</strong> Constructing the CFG</a></li><li class="chapter-item expanded "><a href="lab2/ssa.html"><strong aria-hidden="true">3.2.</strong> The SSA form</a></li><li class="chapter-item expanded "><a href="lab2/end.html"><strong aria-hidden="true">3.3.</strong> End of Lab 02</a></li></ol></li><li class="chapter-item expanded "><a href="lab3/index.html"><strong aria-hidden="true">4.</strong> Lab 03: Producing a Uxn ROM</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="lab3/abstract_stack_machine.html"><strong aria-hidden="true">4.1.</strong> An abstract stack machine</a></li><li class="chapter-item expanded "><a href="lab3/end.html"><strong aria-hidden="true">4.2.</strong> End of Lab 03</a></li></ol></li><li class="chapter-item expanded "><a href="lab4/index.html"><strong aria-hidden="true">5.</strong> Bonus lab: Optimizations</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="lab4/constant_propagation.html"><strong aria-hidden="true">5.1.</strong> Constant propagation</a></li><li class="chapter-item expanded "><a href="lab4/dead_code_elimination.html"><strong aria-hidden="true">5.2.</strong> Dead code elimination</a></li><li class="chapter-item expanded "><a href="lab4/loops.html"><strong aria-hidden="true">5.3.</strong> Loop optimizations</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lua101.html"><strong aria-hidden="true">1.1.</strong> Lua 101</a></li><li class="chapter-item expanded "><a href="../uxn101.html"><strong aria-hidden="true">1.2.</strong> Uxn 101</a></li></ol></li><li class="chapter-item expanded "><a href="../lab1/index.html"><strong aria-hidden="true">2.</strong> Lab 01: Parsing Lua</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lab1/lua_syntax.html"><strong aria-hidden="true">2.1.</strong> Lua's syntax</a></li><li class="chapter-item expanded "><a href="../lab1/implementing_parser.html"><strong aria-hidden="true">2.2.</strong> Implementing the grammar in LALRPOP</a></li><li class="chapter-item expanded "><a href="../lab1/pretty_printer.html"><strong aria-hidden="true">2.3.</strong> Pretty printing our AST</a></li><li class="chapter-item expanded "><a href="../lab1/end.html"><strong aria-hidden="true">2.4.</strong> End of Lab 01</a></li></ol></li><li class="chapter-item expanded "><a href="../lab2/index.html"><strong aria-hidden="true">3.</strong> Lab 02: Intermediate representation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lab2/control_flow_graph.html" class="active"><strong aria-hidden="true">3.1.</strong> Constructing the CFG</a></li><li class="chapter-item expanded "><a href="../lab2/ssa.html"><strong aria-hidden="true">3.2.</strong> The SSA form</a></li><li class="chapter-item expanded "><a href="../lab2/end.html"><strong aria-hidden="true">3.3.</strong> End of Lab 02</a></li></ol></li><li class="chapter-item expanded "><a href="../lab3/index.html"><strong aria-hidden="true">4.</strong> Lab 03: Producing a Uxn ROM</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lab3/abstract_stack_machine.html"><strong aria-hidden="true">4.1.</strong> An abstract stack machine</a></li><li class="chapter-item expanded "><a href="../lab3/end.html"><strong aria-hidden="true">4.2.</strong> End of Lab 03</a></li></ol></li><li class="chapter-item expanded "><a href="../lab4/index.html"><strong aria-hidden="true">5.</strong> Bonus lab: Optimizations</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lab4/constant_propagation.html"><strong aria-hidden="true">5.1.</strong> Constant propagation</a></li><li class="chapter-item expanded "><a href="../lab4/dead_code_elimination.html"><strong aria-hidden="true">5.2.</strong> Dead code elimination</a></li><li class="chapter-item expanded "><a href="../lab4/loops.html"><strong aria-hidden="true">5.3.</strong> Loop optimizations</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -144,7 +144,7 @@
                     <h1 class="menu-title">MiniLua</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
 
@@ -173,64 +173,60 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="uxn-101"><a class="header" href="#uxn-101">Uxn 101</a></h1>
+                        <h1 id="building-the-cfg"><a class="header" href="#building-the-cfg">Building the CFG</a></h1>
+<p>Alright, we have an AST ready for us to use, but it has made its time. Now, if we
+want to properly translate our program into something executable by a Uxn stack machine,
+we'll need to go lower.</p>
+<p>To represent the semantics of our language, we'll use a CFG, which has been introduced
+in the <a href="./lab2/index.html">previous page</a>.</p>
+<p>A CFG is based on small units called "blocks".
+<strong>Careful!</strong> The blocks we're talking about are <em>not</em> the same as the ones in the
+Lua language. These are small units of one or more instructions that are executed
+sequentially. More precisely, <em>there are no control-flow changes between instructions
+in a block</em>. Let's illustrate this with an example.</p>
+<p>Say we have the following Lua program:</p>
+<pre><code class="language-lua">a = true
+b = 0
+while a do
+  b = b + 1
+  if b == 3 then
+    a = false
+  end
+end
+</code></pre>
+<p><code>a = true</code> and <code>b = 0</code> are always executed one after the other. But then, we have
+a <em>control-flow operation</em>. The <code>while</code> loop will repeat itself over and over until
+<code>a</code> is <code>false</code>. So the first two instructions would be in the same block, but not
+the check that <code>a</code> is <code>true</code>, or the body of the loop.</p>
+<h2 id="instructions"><a class="header" href="#instructions">Instructions?</a></h2>
+<p>I said our blocks will contain <strong>instructions</strong>. But what do we define as an instruction,
+actually?</p>
+<p>Well, we mean an intermediate representation of what our program will do!
+We'll have simple, atomic instruction. Those can be things like "goto", "compare two
+variables", "add two variables", etc.</p>
+<p>Those instructions are already defined for you. You shouldn't add to those, they are
+designed to be exactly what you need, for now and later.</p>
+<h2 id="yet-another-visitor"><a class="header" href="#yet-another-visitor">Yet another visitor</a></h2>
+<p>To turn our AST into a corresponding CFG, we'll use our good old friend the <code>Visitor</code>
+trait, which you have defined in <a href="./lab1/pretty_printer.html">Lab 01</a>. Here, we'll do
+more than just printing things to the console.</p>
+<p>Most of said visitor is already implemented, notably for simple, tedious constructs like
+constants or function calls.</p>
 <blockquote>
-<p>Uxn is a virtual stack-machine designed to host the Hundred Rabbits projects.</p>
+<p><strong>ASSIGNMENT</strong>: Complete the visitor that transforms an AST into a corresponding CFG,
+by implementing the visitor functions for blocks, control-flow statements (if, for, while, etc),
+and variable assignation.</p>
 </blockquote>
-<p>Uxn was designed with one goal in mind: <strong>simplicity</strong>. There are only a handful
-of operation codes, two stacks, and some memory. It was mainly designed to host
-simple graphical applications.</p>
-<p>We chose Uxn as the target architecture for this project because:</p>
-<ul>
-<li>it is <strong>simple</strong>, you've implemented everything with 32 opcodes and some modes.</li>
-<li>the emulator <strong>can be embedded easily</strong> into the repository, meaning you don't have to worry about installing a Uxn emulator yourself or anything to try out your generated code.</li>
-<li>it is <strong>readable</strong>, once you've got your feet wet with Uxn, it is pretty easy to read the ROM files in a hex editor and figure out what's going wrong.</li>
-</ul>
-<h2 id="exemple"><a class="header" href="#exemple">Exemple</a></h2>
-<pre><code>a0 01 12 60 00 01 00 94   80 18 17 21 94 20 ff f7  
-22 6c 48 65 6c 6c 6f 20   57 6f 72 6c 64 21 00
-
-// Prints "Hello World!"
-</code></pre>
-<h2 id="stack-machines"><a class="header" href="#stack-machines">Stack machines</a></h2>
-<p>Uxn is a <a href="https://en.wikipedia.org/wiki/Stack_machine">stack machine</a>. Instead of
-putting values in and out of registers, values are pushed and popped to and from the
-stack by operations.</p>
-<p>For example, the <code>ADD</code> operation would pop two numbers from the stack, then push
-the result of adding them together:</p>
-<pre><code>PUSH 01 | 01
-PUSH 03 | 01 03
-ADD     | 04
-</code></pre>
-<p>Uxn uses two circular stacks of 256 bytes: the work stack (<code>WRK</code>) and return stack (<code>RET</code>).</p>
-<p>For more informations, see here: <a href="https://wiki.xxiivv.com/site/uxntal_stacks.html">Uxn stacks</a></p>
-<h2 id="memory"><a class="header" href="#memory">Memory</a></h2>
-<p>Uxn offers 64 kilo-bytes of addressable memory, or RAM. You can assume that this RAM
-is zeroed at the start of execution, except for the contents of your program which are
-stored starting at address <code>0x100</code>.</p>
-<p>In Uxn <strong>you can modify your own program</strong>. This is called <a href="https://en.wikipedia.org/wiki/Self-modifying_code">self-modifying code</a>
-and is considered an anti-pattern in softawre engineering in general, but here
-you can take advantage of it if you'd like! Don't do it outside of those labs, tho
-(or only if you know what you're doing).</p>
-<h2 id="operation-codes"><a class="header" href="#operation-codes">Operation codes</a></h2>
-<p>Everything about Uxn opcodes can be found here: <a href="https://wiki.xxiivv.com/site/uxntal_opcodes.html">Uxn Reference</a>.</p>
-<p>There are 31 common operations and 8 immediate mode operations in Uxn.
-The 31 common operations can be extended using 3 "modes":</p>
-<ul>
-<li><strong>short mode</strong> (noted <code>2</code>) works on values of 16 bits instead of 8.</li>
-<li><strong>return mode</strong> (noted <code>r</code>) changes the target stack of the operation from <code>WRK</code> to <code>RET</code>.</li>
-<li><strong>keep mode</strong> (noted <code>k</code>) forbids consuming any item from the stack.</li>
-</ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="lua101.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../lab2/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="lab1/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../lab2/ssa.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -240,11 +236,11 @@ The 31 common operations can be extended using 3 "modes":</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="lua101.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../lab2/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="lab1/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../lab2/ssa.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
@@ -259,13 +255,13 @@ The 31 common operations can be extended using 3 "modes":</p>
         </script>
 
 
-        <script src="elasticlunr.min.js"></script>
-        <script src="mark.min.js"></script>
-        <script src="searcher.js"></script>
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
 
-        <script src="clipboard.min.js"></script>
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
 
         <!-- Custom JS scripts -->
 

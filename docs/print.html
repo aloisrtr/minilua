@@ -89,7 +89,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="lua101.html"><strong aria-hidden="true">1.1.</strong> Lua 101</a></li><li class="chapter-item expanded "><a href="uxn101.html"><strong aria-hidden="true">1.2.</strong> Uxn 101</a></li></ol></li><li class="chapter-item expanded "><a href="lab1/index.html"><strong aria-hidden="true">2.</strong> Lab 01: Parsing Lua</a></li><li class="chapter-item expanded "><a href="lab2/index.html"><strong aria-hidden="true">3.</strong> Lab 02: Intermediate representation</a></li><li class="chapter-item expanded "><a href="lab3/index.html"><strong aria-hidden="true">4.</strong> Lab 03: Producing a Uxn ROM</a></li><li class="chapter-item expanded "><a href="lab4/index.html"><strong aria-hidden="true">5.</strong> Bonus lab: Optimizations</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="lua101.html"><strong aria-hidden="true">1.1.</strong> Lua 101</a></li><li class="chapter-item expanded "><a href="uxn101.html"><strong aria-hidden="true">1.2.</strong> Uxn 101</a></li></ol></li><li class="chapter-item expanded "><a href="lab1/index.html"><strong aria-hidden="true">2.</strong> Lab 01: Parsing Lua</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="lab1/lua_syntax.html"><strong aria-hidden="true">2.1.</strong> Lua's syntax</a></li><li class="chapter-item expanded "><a href="lab1/implementing_parser.html"><strong aria-hidden="true">2.2.</strong> Implementing the grammar in LALRPOP</a></li><li class="chapter-item expanded "><a href="lab1/pretty_printer.html"><strong aria-hidden="true">2.3.</strong> Pretty printing our AST</a></li><li class="chapter-item expanded "><a href="lab1/end.html"><strong aria-hidden="true">2.4.</strong> End of Lab 01</a></li></ol></li><li class="chapter-item expanded "><a href="lab2/index.html"><strong aria-hidden="true">3.</strong> Lab 02: Intermediate representation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="lab2/control_flow_graph.html"><strong aria-hidden="true">3.1.</strong> Constructing the CFG</a></li><li class="chapter-item expanded "><a href="lab2/ssa.html"><strong aria-hidden="true">3.2.</strong> The SSA form</a></li><li class="chapter-item expanded "><a href="lab2/end.html"><strong aria-hidden="true">3.3.</strong> End of Lab 02</a></li></ol></li><li class="chapter-item expanded "><a href="lab3/index.html"><strong aria-hidden="true">4.</strong> Lab 03: Producing a Uxn ROM</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="lab3/abstract_stack_machine.html"><strong aria-hidden="true">4.1.</strong> An abstract stack machine</a></li><li class="chapter-item expanded "><a href="lab3/end.html"><strong aria-hidden="true">4.2.</strong> End of Lab 03</a></li></ol></li><li class="chapter-item expanded "><a href="lab4/index.html"><strong aria-hidden="true">5.</strong> Bonus lab: Optimizations</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="lab4/constant_propagation.html"><strong aria-hidden="true">5.1.</strong> Constant propagation</a></li><li class="chapter-item expanded "><a href="lab4/dead_code_elimination.html"><strong aria-hidden="true">5.2.</strong> Dead code elimination</a></li><li class="chapter-item expanded "><a href="lab4/loops.html"><strong aria-hidden="true">5.3.</strong> Loop optimizations</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -329,9 +329,546 @@ The 31 common operations can be extended using 3 "modes":</p>
 <li><strong>keep mode</strong> (noted <code>k</code>) forbids consuming any item from the stack.</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="lab-01-parsing-lua"><a class="header" href="#lab-01-parsing-lua">Lab 01: Parsing Lua</a></h1>
+<p>The first step towards compiling any source code is to actually read it.</p>
+<p>Text is an inneficient format to compile from, so we'll first transform it into
+some data structure that is easier to use: an <strong>Abstract Syntax Tree</strong> or <strong>AST</strong> for short.</p>
+<p>We could write our own parser by hand, but this book is focused on compiling, not parsing.
+Language hackers instead often use <strong>parser generators</strong> to do the heavy lifting for
+them. It saves time, energy, and reduces hair loss.</p>
+<blockquote>
+<p>When writing a real, production grade compiler, you'd probably want to opt into
+writing your parser by hand. It is more efficient, easier to maintain in the long
+run, and more powerful in the sense that you can parse <em>virtually</em> anything.</p>
+</blockquote>
+<p>Here, we'll use <a href="https://github.com/lalrpop/lalrpop">LALRPOP</a>, a Rust parser generator
+which is pretty easy to use, albeit still under development. There are many alternative, such
+as <a href="https://www.antlr.org/">ANTLR</a>, <a href="https://www.gnu.org/software/bison/">GNU Bison</a>,
+<a href="https://silcnitc.github.io/yacc.html">Yacc</a>, or even <a href="https://pest.rs/">pest</a> if
+you want to stay in the safe Rust world.</p>
+<p>Next up will be a little reminder of the abstract syntax of Lua, then we'll get into
+the nitty gritty details of implementing our parser. To check that everything went
+right, you'll have to play around with the generated AST by writing a pretty printer.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="luas-syntax"><a class="header" href="#luas-syntax">Lua's syntax</a></h1>
+<p>A stated in <a href="lab1/./lua101.html">Lua 101</a>, Lua is a pretty straightforward scripting
+language. The only feature that might be complex to implement are tables, but we
+explicitely leave them out of this book.</p>
+<p>Given this, here is the full Lua syntax we'll be working on:</p>
+<pre><code>chunk ::= block
+
+block ::= {stat} [retstat]
+
+stat ::=  ‘;’ | 
+	 varlist ‘=’ explist | 
+	 functioncall | 
+	 label | 
+	 break | 
+	 goto Name | 
+	 do block end | 
+	 while exp do block end | 
+	 repeat block until exp | 
+	 if exp then block {elseif exp then block} [else block] end | 
+	 for Name ‘=’ exp ‘,’ exp [‘,’ exp] do block end | 
+	 for namelist in explist do block end | 
+	 function funcname funcbody | 
+	 local function Name funcbody | 
+	 local attnamelist [‘=’ explist] 
+
+attnamelist ::=  Name attrib {‘,’ Name attrib}
+
+attrib ::= [‘&lt;’ Name ‘&gt;’]
+
+retstat ::= return [explist] [‘;’]
+
+label ::= ‘::’ Name ‘::’
+
+funcname ::= Name {‘.’ Name} [‘:’ Name]
+
+varlist ::= var {‘,’ var}
+
+var ::=  Name | prefixexp ‘[’ exp ‘]’ | prefixexp ‘.’ Name 
+
+namelist ::= Name {‘,’ Name}
+
+explist ::= exp {‘,’ exp}
+
+exp ::=  nil | false | true | Numeral | LiteralString | ‘...’ | functiondef | 
+	 prefixexp | exp binop exp | unop exp 
+
+prefixexp ::= var | functioncall | ‘(’ exp ‘)’
+
+functioncall ::=  prefixexp args | prefixexp ‘:’ Name args 
+
+args ::=  ‘(’ [explist] ‘)’ | LiteralString 
+
+functiondef ::= function funcbody
+
+funcbody ::= ‘(’ [parlist] ‘)’ block end
+
+parlist ::= namelist [‘,’ ‘...’] | ‘...’
+
+binop ::=  ‘+’ | ‘-’ | ‘*’ | ‘/’ | ‘//’ | ‘^’ | ‘%’ | 
+	 ‘&amp;’ | ‘~’ | ‘|’ | ‘&gt;&gt;’ | ‘&lt;&lt;’ | ‘..’ | 
+	 ‘&lt;’ | ‘&lt;=’ | ‘&gt;’ | ‘&gt;=’ | ‘==’ | ‘~=’ | 
+	 and | or
+
+unop ::= ‘-’ | not | ‘#’ | ‘~’
+</code></pre>
+<p>It is expressed in extended BNF. <code>{A}</code> means 0 or more times <code>A</code>, <code>[A]</code> means an
+optional <code>A</code>.
+Terminals are capitalized, like <code>Numeral</code>, <code>Name</code>, etc. These will already be implemented
+in our grammar, you can look at how they are presented by should not worry about them too much.</p>
+<ul>
+<li><code>Name</code> represents an identifier, composed of letters, digits and underscores. <code>identi_fier</code> is valid, <code>9%identifier</code> is not.</li>
+<li><code>Numeral</code> represents a number value, like <code>10</code> or <code>0.30E</code>.</li>
+<li><code>LiteralString</code> represents... a string!</li>
+</ul>
+<p>The basic unit of the Lua grammar is the <code>chunk</code>. It represents the AST from a <code>.lua</code>
+file.</p>
+<h1 id="example"><a class="header" href="#example">Example</a></h1>
+<p>We'll try to parse the typical "hello world" using our grammar, here's the sample code:</p>
+<pre><code class="language-lua">print("Hello, world!")
+</code></pre>
+<p>We start from the <code>chunk</code>, which itself is a <code>block</code>. Our <code>block</code> contains a list of
+0 or more statements. Here, our statement looks like <code>print("Hello, world!")</code>.
+The little <code>A | B</code> means our statement is either <code>A</code> or <code>B</code>.</p>
+<p>So we try <code>varlist '=' explist</code>... Doesn't look like our example, we have no <code>=</code> in
+sight! Next up is <code>functioncall</code>, now this sounds more like it.</p>
+<p>We keep going down our little grammar, matching things as they go, and we end up with this tree:
+TODO: show the tree</p>
+<p>This is our AST in all its glory!</p>
+<p>Now all that's left to do is to automate this, because this would be tedious otherwise.
+Let's jump into implementing a parser for Lua in LALRPOP.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="implementing-the-grammar-in-lalrpop"><a class="header" href="#implementing-the-grammar-in-lalrpop">Implementing the grammar in LALRPOP</a></h1>
+<p><a href="https://github.com/lalrpop/lalrpop">LALRPOP</a> is a parser generator. Such frameworks
+take a grammar as input, like <a href="lab1/./lab1/lua_syntax.html">the one we described for Lua</a>,
+and generates code that can itself parse the grammar into an abstract syntax tree.</p>
+<p>This dark magic can be accomplished because parsing is very well formally documented
+and extensively studied. Algorithms to parse grammars are classified, and we'll be using
+a so-called <a href="https://en.wikipedia.org/wiki/LR_parser">LR parser</a>.</p>
+<h2 id="lalrpop-crash-course"><a class="header" href="#lalrpop-crash-course">LALRPOP crash course</a></h2>
+<p>Our grammar will be defined in the [lua.lalrpop] file. LALRPOP is actually a fully-fledged
+language to describe grammars.</p>
+<p>Here's a sample LALRPOP file:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::str::FromStr;
+
+grammar;
+
+pub Term: i32 = {
+    &lt;n:Num&gt; =&gt; n,
+    "(" &lt;t:Term&gt; ")" =&gt; t,
+};
+
+Num: i32 = &lt;s:r"[0-9]+"&gt; =&gt; i32::from_str(s).unwrap();
+<span class="boring">}</span></code></pre></pre>
+<p><strong>TODO: more explanation</strong></p>
+<h2 id="implementing-control-flow"><a class="header" href="#implementing-control-flow">Implementing control-flow</a></h2>
+<p>Most of the Lua grammar has been written out for you, how lucky! But we're here
+to learn, and learning comes from doing.</p>
+<p>Currently, the grammar has a few holes in it, mainly the <code>Statement</code> rule is missing
+control-flow operations (<code>while</code>, <code>for</code>, <code>if</code>).</p>
+<p>Try to implement those using the <a href="lab1/./lab1/lua_syntax.html">Lua syntax</a> as reference.</p>
+<p>Once that's done, you can move to pretty printing to test whether your parser is working
+or not.</p>
+<h2 id="turning-it-all-into-an-ast"><a class="header" href="#turning-it-all-into-an-ast">Turning it all into an AST</a></h2>
+<p>As of now, our tree is more of a Concrete Syntax Tree (CST). We still have a lot
+of redundant information about statements, funname, etc. This is obviously harder
+to work with, we'd want a clean AST, abstracted from the details of the Lua grammar.</p>
+<p>Thankfully, LALRPOP allows us to do this through ad-hoc constructs. When the grammar
+is parsed, we can apply transformations to the raw data to create our own structures,
+enumerations, etc.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="pretty-printing-our-ast"><a class="header" href="#pretty-printing-our-ast">Pretty printing our AST</a></h1>
+<p>Now that we have our AST all nice and cozy: <em>how</em> do we use it?</p>
+<p>Well, ASTs are... trees. If you've ever worked with a tree before, you'll probably
+know some algorithm to traverse them like DFS, BFS, etc.</p>
+<p>But remember that our data is heterogenous when it comes to typing. We can visit
+expressions that might or might not have integers in them, or other expressions, or
+anything really.</p>
+<p>Here comes our champion: <strong>the visitor pattern</strong>.
+A visitor is a type that encapsulates an algorithm over heterogeneous data. Exactly
+what we'd need!</p>
+<h2 id="the-visitor-trait"><a class="header" href="#the-visitor-trait">The Visitor trait</a></h2>
+<p>The <code>Visitor</code> trait allows a type to implement tree-traversal however it wants.
+Here's what it would look like on a simple AST:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub trait Visitor {
+  fn visit_identifier(&amp;mut self, id: &amp;Identifier);
+  fn visit_expression(&amp;mut self, expr: &amp;Expression);
+  // you get the idea
+}
+<span class="boring">}</span></code></pre></pre>
+<p>On the other side of the coin, our AST types will have to implement a method to
+<em>accept</em> the visitor into their home. It would look something like this:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum Expression {
+  // variants for our AST expression
+}
+impl Expression {
+  pub fn accept&lt;V: Visitor&gt;(&amp;self, visitor: &amp;mut V) {
+    match self {
+      Expression::Add(lhs, rhs) =&gt; {
+        visitor.visit_expression(lhs);
+        visitor.visit_expression(rhs);
+      },
+      // a bunch of repetition here
+    }
+  }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>That's it. That's all there is to visitors, and yet we'll use them all over our code.</p>
+<blockquote>
+<p><strong>ASSIGNMENT</strong>: Define the <code>Visitor</code> trait for your AST.</p>
+</blockquote>
+<h2 id="a-pretty-printer-visitor"><a class="header" href="#a-pretty-printer-visitor">A pretty printer visitor</a></h2>
+<p>To showcase what we can do with visitors and how to use them, let's start simple
+with a pretty printer of our AST.</p>
+<p>Pretty printers are dead simple: visit a part of your AST, and print it nicely to
+the console.</p>
+<p>Let's say we have a simple language to express addition, subtraction, multiplication
+and division of integers. Our AST would look something like this:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum Operation {
+  Add(Box&lt;Operation&gt;, Box&lt;Operation&gt;),
+  Sub(Box&lt;Operation&gt;, Box&lt;Operation&gt;),
+  Mul(Box&lt;Operation&gt;, Box&lt;Operation&gt;),
+  Div(Box&lt;Operation&gt;, Box&lt;Operation&gt;),
+  Number(i32)
+}
+<span class="boring">}</span></code></pre></pre>
+<p>And our visitor something like:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub trait OperationVisitor {
+  fn visit_operation(&amp;mut self, operation: &amp;Operation);
+}
+<span class="boring">}</span></code></pre></pre>
+<p>We'd want to implement our pretty printer as follows:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct OperationPrettyPrinter;
+impl OperationVisitor for OperationPrettyPrinter {
+  fn visit_operation(&amp;mut self, operation: &amp;Operation) {
+    match operation {
+      Operation::Add(lhs, rhs) =&gt; {
+        this.visit_operation(lhs);
+        print!(" + ");
+        this.visit_operation(rhs);
+      },
+      // Similiar for other operations
+      // Operation::Sub(lhs, rhs) =&gt; ...
+      Operation::Number(n) =&gt; {
+        print!("{n}")
+      }
+    }
+  }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>If we run this visitor on an example AST:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let ast = Operation::Add(
+  Operation::Sub(Operation::Number(3), Operation::Number(2)),
+  Operation::Mul(Operation::Number(2), Operation::Number(0))
+);
+OperationPrettyPrinter.visit_operation(ast);
+// Prints "3 - 2 + 2 * 0" to the console
+<span class="boring">}</span></code></pre></pre>
+<blockquote>
+<p><strong>ASSIGNMENT</strong>: Now that you have an example of how visitors work, try to implement
+a visitor to pretty print your Lua AST back to its original form. Or event prettier!</p>
+</blockquote>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="what-weve-done-so-far"><a class="header" href="#what-weve-done-so-far">What we've done so far</a></h1>
+<p>In this first lab, we hopefully:</p>
+<ul>
+<li>have a working parser for the Lua language which constructs a usable AST.</li>
+<li>defined a <code>Visitor</code> trait which we'll implement for a bunch of different treatments of said AST.</li>
+<li>created a first <code>Visitor</code> who's job is to pretty print our AST back to readable code.</li>
+</ul>
+<p>For now, these might seem like baby steps. Where are the optimizations? When are
+we going to generate executable code??? All comes in due time, and we'll start
+tackling this in the next lab.</p>
+<p>For now, make sure that your implementation is well tested and fully funtional up
+to this point. You've just laid the groundwork for your compiler, and it needs to
+be rock solid!</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="lab-02-intermediate-representation"><a class="header" href="#lab-02-intermediate-representation">Lab 02: Intermediate representation</a></h1>
+<p>Intermediate representations (IR) are the crux of any compiler. This is the representation
+of the code that you'll work on for your optimizations, checks, and other stuff.</p>
+<blockquote>
+<p>Intermediate representations are often <em>common</em> to multiple languages. This is how
+frameworks like LLVM can be used so widely: you just need a frontend that transforms
+your code into LLVM's intermediate representation and you get all the niceties
+and plateform support that the LLVM backend implements.</p>
+</blockquote>
+<blockquote>
+<p>It can even happen that compilers have multiple IR, each with their own speciality.
+CompCert, a formally proven compiler, has about 9 of them! But this is an extreme example.</p>
+</blockquote>
+<h2 id="classes-of-intermediate-representations"><a class="header" href="#classes-of-intermediate-representations">Classes of intermediate representations</a></h2>
+<h3 id="syntactical-representations"><a class="header" href="#syntactical-representations">Syntactical representations</a></h3>
+<p>Actually, the AST you created during the previous lab <em>is</em> an intermediate representation!
+Just... not a really practical one. It is a so-called <strong>syntactical</strong> representation,
+meaning it represents the syntax of your program in a computer-friendly way.</p>
+<p>Another example of syntactical representation is a Direct Acyclic Graph (DAG), which
+acts just like an AST, but can reuse common subexpressions.</p>
+<p>Such representations are usually great for pretty-printing, language servers,
+autocomplete tools and whatnot.</p>
+<h3 id="graphical-representations"><a class="header" href="#graphical-representations">Graphical representations</a></h3>
+<p>On the other hand, you have <strong>graphical</strong> representations. These include things like
+Control-Flow Graphs (CFG), which encodes paths that might be traversed in a program
+during its execution, or Dependency Graphs (DG), which represents the flow of information.</p>
+<p>A CFG would represent a while loop as a cycle, and a DG may be more useful to encode
+the order in which operations should take place to optimize that. These representations
+are more useful for optimization.</p>
+<h3 id="linear-representations"><a class="header" href="#linear-representations">Linear representations</a></h3>
+<p>Finally, <strong>linear</strong> representations tend to stick to machine code more faithfully.
+They are mainly used as the final part of the compilation pipeline, when one needs
+to convert high-level representations to actual executable instructions.</p>
+<p>Exemples of linear representations include the three-address code, in which each instruction
+has at most three operands, or abstract stack machines, which emulate a... high level
+stack machine.</p>
+<h2 id="what-do-we-pick"><a class="header" href="#what-do-we-pick">What do we pick?</a></h2>
+<p>We'll use a total of three intermediate representations:</p>
+<ul>
+<li>the <strong>AST</strong>, which we already implemented</li>
+<li>a <strong>Control Flow Graph</strong> with <strong>Static Single Assignment</strong> (SSA) form, which we'll implement in this lab</li>
+<li>an <strong>Abstract Stack Machine</strong>, but we'll wait until we work on generating Uxn code for this one</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="building-the-cfg"><a class="header" href="#building-the-cfg">Building the CFG</a></h1>
+<p>Alright, we have an AST ready for us to use, but it has made its time. Now, if we
+want to properly translate our program into something executable by a Uxn stack machine,
+we'll need to go lower.</p>
+<p>To represent the semantics of our language, we'll use a CFG, which has been introduced
+in the <a href="lab2/./lab2/index.html">previous page</a>.</p>
+<p>A CFG is based on small units called "blocks".
+<strong>Careful!</strong> The blocks we're talking about are <em>not</em> the same as the ones in the
+Lua language. These are small units of one or more instructions that are executed
+sequentially. More precisely, <em>there are no control-flow changes between instructions
+in a block</em>. Let's illustrate this with an example.</p>
+<p>Say we have the following Lua program:</p>
+<pre><code class="language-lua">a = true
+b = 0
+while a do
+  b = b + 1
+  if b == 3 then
+    a = false
+  end
+end
+</code></pre>
+<p><code>a = true</code> and <code>b = 0</code> are always executed one after the other. But then, we have
+a <em>control-flow operation</em>. The <code>while</code> loop will repeat itself over and over until
+<code>a</code> is <code>false</code>. So the first two instructions would be in the same block, but not
+the check that <code>a</code> is <code>true</code>, or the body of the loop.</p>
+<h2 id="instructions"><a class="header" href="#instructions">Instructions?</a></h2>
+<p>I said our blocks will contain <strong>instructions</strong>. But what do we define as an instruction,
+actually?</p>
+<p>Well, we mean an intermediate representation of what our program will do!
+We'll have simple, atomic instruction. Those can be things like "goto", "compare two
+variables", "add two variables", etc.</p>
+<p>Those instructions are already defined for you. You shouldn't add to those, they are
+designed to be exactly what you need, for now and later.</p>
+<h2 id="yet-another-visitor"><a class="header" href="#yet-another-visitor">Yet another visitor</a></h2>
+<p>To turn our AST into a corresponding CFG, we'll use our good old friend the <code>Visitor</code>
+trait, which you have defined in <a href="lab2/./lab1/pretty_printer.html">Lab 01</a>. Here, we'll do
+more than just printing things to the console.</p>
+<p>Most of said visitor is already implemented, notably for simple, tedious constructs like
+constants or function calls.</p>
+<blockquote>
+<p><strong>ASSIGNMENT</strong>: Complete the visitor that transforms an AST into a corresponding CFG,
+by implementing the visitor functions for blocks, control-flow statements (if, for, while, etc),
+and variable assignation.</p>
+</blockquote>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="the-ssa-form"><a class="header" href="#the-ssa-form">The SSA form</a></h1>
+<p>The Static Single-Assignment form (SSA for short) is a simplified form for instructions
+that forces each variable to be assigned to exactly once. It mostly eases up
+our work when it will come to optimizing the produced assembly.</p>
+<p>We'll use a simple algorithm, courtesy of Braun et al. in "Simple and Efficient
+Construction of Static Single Assignment Form". This algorithm spans over
+multiple parts of our CFG construction, notably when evaluating variables or linking
+blocks together.</p>
+<blockquote>
+<p>Note that this does not produce a minimal SSA form. More complex techniques, such as
+dominance frontiers, produce said minimal form, but are more difficult to implement.
+We'll settle for this algorithm in those labs!</p>
+</blockquote>
+<h2 id="local-value-numbering"><a class="header" href="#local-value-numbering">Local value numbering</a></h2>
+<p>The most obvious part of SSA is to say: "hey, just change all variables in this
+block and replace them with a unique one". And yeah, that works... for variables that
+exist within a single block!</p>
+<p>Here's the algorithm for writing to variables:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// self is our symbol table
+fn write_variable(&amp;mut self, identifier: &amp;str, block: &amp;mut Block, value: IRValue) {
+  self[variable][block] = value
+}
+<span class="boring">}</span></code></pre></pre>
+<p>When evaluating a variable, we then do:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn read_variable(&amp;mut self, identifier: &amp;str, block: &amp;mut Block) -&gt; IRValue {
+  if self[variable].contains(block) {
+    return self[variable][block]
+  } else {
+    // TODO: We'll look into that later
+  }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Let's try with an example:</p>
+<pre><code>a &lt;- 42
+b &lt;- a
+c &lt;- a + b
+a &lt;- c + 23
+c &lt;- a + c
+</code></pre>
+<p>would turn into:</p>
+<pre><code>v1 &lt;- 42
+// v2 &lt;- v1 is useless, we don't care about renaming a unique variable
+v2 &lt;- v1 + v1 // a and b are the same
+v3 &lt;- 23 // constants are also given unique variables
+v4 &lt;- v2 + v2
+v5 &lt;- v4 + v2
+</code></pre>
+<p>And there you go! A valid SSA form! What do you mean, there are multiple blocks?</p>
+<h2 id="global-value-numbering"><a class="header" href="#global-value-numbering">Global value numbering</a></h2>
+<p>Say we now have a program that's a little more complicated:</p>
+<pre><code>// Block 1
+a &lt;- true
+b &lt;- 0
+if a then
+  // Block 2
+  b &lt;- 1
+else 
+  // Block 3
+  b &lt;- 2
+  a &lt;- false
+end
+// Block 4
+</code></pre>
+<p>Eeeeh... what would the value assigned to <code>b</code> be in <code>Block 4</code>?</p>
+<p>Introducing: <code>phi</code> instructions!</p>
+<h3 id="phi-instructions"><a class="header" href="#phi-instructions">Phi instructions</a></h3>
+<p><code>phi</code> instructions allow you to "choose" a value between multiple possibilities.
+Here's what the previous example would look like in SSA form:</p>
+<pre><code>Block 1:
+v1 &lt;- true
+v2 &lt;- 0
+if (v1) goto Block 2 else goto Block 3
+
+Block 2:
+v3 &lt;- 1
+
+Block 3:
+v4 &lt;- 2
+v5 &lt;- false
+
+Block 4:
+v6 &lt;- phi(v1, v5) // a can be either true or false
+v7 &lt;- phi(v3, v4) // b can be either 1 or 2
+</code></pre>
+<p>We can finally complete our previous example!</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn read_variable(&amp;mut self, identifier: &amp;str, block: &amp;mut Block) -&gt; IRValue {
+  if self[variable].contains(block) {
+    return self[variable][block]
+  } else {
+    // Global variable numbering
+    if !block.sealed() {
+      // We have an incomplete CFG! We need to first complete the predecessors of this
+      // block before we can evaluate this variable
+      let phi = Phi::empty();
+      // TODO
+      return phi
+    } else if block.predecessors().length() == 1 {
+      // If there's only one predecessor, we just read the value that the variable had then
+      return self.read_variable(identifier, block.predecessors()[0])
+    } else {
+      let mut phi = Phi::empty();
+      self.write_variable(identifier, block, phi);
+      for predecessor in block.predecessors() {
+        phi.add(self.read_variable(identifier, predecessor))
+      }
+      // OPTIMIZATION: We can remove trivial phi operations here if they only
+      // reference themselves and another variable
+    }
+  }
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="linking-blocks-together"><a class="header" href="#linking-blocks-together">Linking blocks together</a></h2>
+<p>We now have a small problem: since we're building up our SSA form <em>while</em> building
+our CFG, some blocks may not know all of their predecessors when reading a variable!</p>
+<p>To avoid this causing problems, we implement the idea of <em>sealed</em> and <em>filled</em> blocks.</p>
+<p>Filled blocks are blocks on which no incomplete (empty) phi instructions remain.
+<strong>Only filled blocks can have successors!</strong></p>
+<p>We can seal a block when all of its successors were found. When sealing a block, we
+can resolve all of the empty phis inside it: after all, we know all of our predecessors
+now!</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="end-of-lab-02"><a class="header" href="#end-of-lab-02">End of Lab 02</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="lab-03-producing-a-uxn-rom"><a class="header" href="#lab-03-producing-a-uxn-rom">Lab 03: Producing a Uxn ROM</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="an-abstract-stack-machine"><a class="header" href="#an-abstract-stack-machine">An abstract stack machine</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="end-of-lab-03"><a class="header" href="#end-of-lab-03">End of Lab 03</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="bonus-lab-optimizations"><a class="header" href="#bonus-lab-optimizations">Bonus lab: Optimizations</a></h1>
+<p>Now that we've got ourselves a compiler that actually compiles Lua code to
+Uxn instructions, it's time for the fun: <strong>optimization</strong>!</p>
+<p>This part of the labs is <em>optional</em>. Building a compiler that produces working
+code is already difficult enough. However, we still recommand trying to implement
+<em>at least one</em> optimization, for completeness' sake.</p>
+<p>Optimizations are (except for special cases like CompCert) the only part of our compiler
+that <em>might</em> lead to miscompilations if we're not careful. We try to keep semantics
+intact, but bugs easily slip in. On the same page, sometimes optimizations <em>don't
+optimize</em>. There's no guarantee, you may find an edge case where performance just gets
+worse! But generally speaking, it works.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="constant-propagation"><a class="header" href="#constant-propagation">Constant propagation</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="dead-code-elimination"><a class="header" href="#dead-code-elimination">Dead code elimination</a></h1>
+<p>This optimization aims at reducing code that is not useful. It is primarily useful
+to reduce the size of our resulting program, altough it might also improve performance
+due to cache effects.</p>
+<h2 id="liveness-analysis"><a class="header" href="#liveness-analysis">Liveness analysis</a></h2>
+<p>We define notions of usage and definition for variables. A variable is used in a block
+when it is read somewhere, and defined if it is written to.</p>
+<p>From those properties, we can define the properties of "live", live-in" and "live-out":</p>
+<ul>
+<li>a variable is "live" on a transition if we can find a path to a block in which it is used without encountering any block defining it.</li>
+<li>a variable is "live-in" in a block if it is live in at least one transition leading to it.</li>
+<li>a variable is "live-out" in a block if it is live in at least one transition from said block.</li>
+</ul>
+<p>We can note a few properties on these sets of variables:</p>
+<ul>
+<li>a variable is necessarilly "live-in" in a block if it is used.</li>
+<li>if a variable is "live-in" in a block, then it is "live-out" in all of its predecessors.</li>
+<li>a variable that is "live-out" and not defined in a block is also "live-in" in this block.</li>
+</ul>
+<blockquote>
+<p><strong>ASSIGNMENT</strong>: Implement a "liveness analysis" computing the set of live-in and live-out
+variables for your blocks.</p>
+</blockquote>
+<h2 id="reaching-definition"><a class="header" href="#reaching-definition">Reaching definition</a></h2>
+<p>TODO</p>
+<h2 id="common-subexpression-elimination"><a class="header" href="#common-subexpression-elimination">Common subexpression elimination</a></h2>
+<p>Finally, some optimization using our long definitions from before!</p>
+<p>Look at the following IR:</p>
+<pre><code>Block 0:
+  v1: 1
+  v2: 2
+  
+Block 1:
+  v3: v1 + v2 + 3
+  if (cond) goto Block 2 else Block 3
+
+Block 2: ... goto Block 4
+Block 3: ... goto Block 4
+
+Block 5:
+  v4: v1 + v2
+</code></pre>
+<p>We compute <code>v1 + v2</code> twice! If we generate code from this, we might lose precious
+cycles fetching the values, adding, and all that tedious stuff. We'd want to compute
+this result once, store it in a variable, and reuse it when needed.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="loop-optimizations"><a class="header" href="#loop-optimizations">Loop optimizations</a></h1>
 
                     </main>
 
