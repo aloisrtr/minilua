@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Bonus lab: Optimizations - MiniLua</title>
+        <title>Liveness and reachability - MiniLua</title>
 
 
         <!-- Custom HTML head -->
@@ -90,7 +90,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lua101.html"><strong aria-hidden="true">1.1.</strong> Lua 101</a></li><li class="chapter-item expanded "><a href="../uxn101.html"><strong aria-hidden="true">1.2.</strong> Uxn 101</a></li></ol></li><li class="chapter-item expanded "><a href="../lab1/index.html"><strong aria-hidden="true">2.</strong> Lab 01: Parsing Lua</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lab1/lua_syntax.html"><strong aria-hidden="true">2.1.</strong> Lua's syntax</a></li><li class="chapter-item expanded "><a href="../lab1/implementing_parser.html"><strong aria-hidden="true">2.2.</strong> Implementing the grammar in LALRPOP</a></li><li class="chapter-item expanded "><a href="../lab1/pretty_printer.html"><strong aria-hidden="true">2.3.</strong> Pretty printing our AST</a></li><li class="chapter-item expanded "><a href="../lab1/end.html"><strong aria-hidden="true">2.4.</strong> End of Lab 01</a></li></ol></li><li class="chapter-item expanded "><a href="../lab2/index.html"><strong aria-hidden="true">3.</strong> Lab 02: Intermediate representation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lab2/control_flow_graph.html"><strong aria-hidden="true">3.1.</strong> Constructing the CFG</a></li><li class="chapter-item expanded "><a href="../lab2/ssa.html"><strong aria-hidden="true">3.2.</strong> The SSA form</a></li><li class="chapter-item expanded "><a href="../lab2/liveness_reachability.html"><strong aria-hidden="true">3.3.</strong> Liveness and reachability</a></li><li class="chapter-item expanded "><a href="../lab2/end.html"><strong aria-hidden="true">3.4.</strong> End of Lab 02</a></li></ol></li><li class="chapter-item expanded "><a href="../lab3/index.html"><strong aria-hidden="true">4.</strong> Lab 03: Producing a Uxn ROM</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lab3/abstract_stack_machine.html"><strong aria-hidden="true">4.1.</strong> An abstract stack machine</a></li><li class="chapter-item expanded "><a href="../lab3/end.html"><strong aria-hidden="true">4.2.</strong> End of Lab 03</a></li></ol></li><li class="chapter-item expanded "><a href="../lab4/index.html" class="active"><strong aria-hidden="true">5.</strong> Bonus lab: Optimizations</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lab4/constant_propagation.html"><strong aria-hidden="true">5.1.</strong> Constant propagation</a></li><li class="chapter-item expanded "><a href="../lab4/dead_code_elimination.html"><strong aria-hidden="true">5.2.</strong> Dead code elimination</a></li><li class="chapter-item expanded "><a href="../lab4/loops.html"><strong aria-hidden="true">5.3.</strong> Loop optimizations</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lua101.html"><strong aria-hidden="true">1.1.</strong> Lua 101</a></li><li class="chapter-item expanded "><a href="../uxn101.html"><strong aria-hidden="true">1.2.</strong> Uxn 101</a></li></ol></li><li class="chapter-item expanded "><a href="../lab1/index.html"><strong aria-hidden="true">2.</strong> Lab 01: Parsing Lua</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lab1/lua_syntax.html"><strong aria-hidden="true">2.1.</strong> Lua's syntax</a></li><li class="chapter-item expanded "><a href="../lab1/implementing_parser.html"><strong aria-hidden="true">2.2.</strong> Implementing the grammar in LALRPOP</a></li><li class="chapter-item expanded "><a href="../lab1/pretty_printer.html"><strong aria-hidden="true">2.3.</strong> Pretty printing our AST</a></li><li class="chapter-item expanded "><a href="../lab1/end.html"><strong aria-hidden="true">2.4.</strong> End of Lab 01</a></li></ol></li><li class="chapter-item expanded "><a href="../lab2/index.html"><strong aria-hidden="true">3.</strong> Lab 02: Intermediate representation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lab2/control_flow_graph.html"><strong aria-hidden="true">3.1.</strong> Constructing the CFG</a></li><li class="chapter-item expanded "><a href="../lab2/ssa.html"><strong aria-hidden="true">3.2.</strong> The SSA form</a></li><li class="chapter-item expanded "><a href="../lab2/liveness_reachability.html" class="active"><strong aria-hidden="true">3.3.</strong> Liveness and reachability</a></li><li class="chapter-item expanded "><a href="../lab2/end.html"><strong aria-hidden="true">3.4.</strong> End of Lab 02</a></li></ol></li><li class="chapter-item expanded "><a href="../lab3/index.html"><strong aria-hidden="true">4.</strong> Lab 03: Producing a Uxn ROM</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lab3/abstract_stack_machine.html"><strong aria-hidden="true">4.1.</strong> An abstract stack machine</a></li><li class="chapter-item expanded "><a href="../lab3/end.html"><strong aria-hidden="true">4.2.</strong> End of Lab 03</a></li></ol></li><li class="chapter-item expanded "><a href="../lab4/index.html"><strong aria-hidden="true">5.</strong> Bonus lab: Optimizations</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../lab4/constant_propagation.html"><strong aria-hidden="true">5.1.</strong> Constant propagation</a></li><li class="chapter-item expanded "><a href="../lab4/dead_code_elimination.html"><strong aria-hidden="true">5.2.</strong> Dead code elimination</a></li><li class="chapter-item expanded "><a href="../lab4/loops.html"><strong aria-hidden="true">5.3.</strong> Loop optimizations</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -175,27 +175,75 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="bonus-lab-optimizations"><a class="header" href="#bonus-lab-optimizations">Bonus lab: Optimizations</a></h1>
-<p>Now that we've got ourselves a compiler that actually compiles Lua code to
-Uxn instructions, it's time for the fun: <strong>optimization</strong>!</p>
-<p>This part of the labs is <em>optional</em>. Building a compiler that produces working
-code is already difficult enough. However, we still recommand trying to implement
-<em>at least one</em> optimization, for completeness' sake.</p>
-<p>Optimizations are (except for special cases like CompCert) the only part of our compiler
-that <em>might</em> lead to miscompilations if we're not careful. We try to keep semantics
-intact, but bugs easily slip in. On the same page, sometimes optimizations <em>don't
-optimize</em>. There's no guarantee, you may find an edge case where performance just gets
-worse! But generally speaking, it works.</p>
+                        <h1 id="liveness-and-reachability-computations"><a class="header" href="#liveness-and-reachability-computations">Liveness and reachability computations</a></h1>
+<p>Now that we have a functional IR, it's time to do some calculations with it!</p>
+<p>The most common informations we'd want to grab from the IR are the notions of
+<strong>liveness</strong> and <strong>reachability</strong>. These are called <strong>dataflow equations</strong>.
+Let's first present what these are.</p>
+<h2 id="liveness"><a class="header" href="#liveness">Liveness</a></h2>
+<p>Liveness defines wether "this variable is needed in the future".</p>
+<p>In order to reason about this, we need to define a few properties of variables within
+a block:</p>
+<ul>
+<li>a variable is <strong>used</strong> in a block if its value is read.</li>
+<li>a variable is <strong>defined</strong> in a block if a value is written to it.</li>
+<li>variables can be <strong>live</strong> between two blocks if there is a path to a block where its used without any blocks where it is defined in between.</li>
+<li>a variable is called <strong>live-in</strong> in a block if is live in at least one transition to said block.</li>
+<li>a variable is called <strong>live-out</strong> in a block if it is live in at least one transition from this block.</li>
+</ul>
+<p>To ease things up, we'll often be talking about sets of variables verifying a property.
+For example, the \( used(b) \) set is the set of variables that are used in block \( b \).</p>
+<p>Computing liveness information is a matter of saturating the \( live_in \) and \( live_out \)
+sets for each block: we define set operations that make each of them grow, and
+stop when our sets are not changing anymore.</p>
+<p>Our set operations will be as follows:
+\[ live_{out}(b) = \bigcup_{s \in succ(b)} live_{in}(s) \]
+\[ live_{in}(b) = used(b) \cup (live_{out}(b) - defined(b)) \]</p>
+<blockquote>
+<p>You can either go up or down your graph when saturating the set.
+Going up (from the leaves to the root) is faster, as the main computation comes
+from updating the \( out \) set from successors: if liveness for successors
+is already fully computed, this is way easier to do!</p>
+</blockquote>
+<h2 id="reachability"><a class="header" href="#reachability">Reachability</a></h2>
+<p>Reachability answers the question of "does assigning to variable \( x \) impact
+the value of \( y \) in the future?"</p>
+<p>We generate three more sets describing our variables in a block \( b \):</p>
+<ul>
+<li>\( gen(b) \) is the set of definitions <strong>generated</strong> in our block.</li>
+<li>\( kill(b) \) is the set of blocks that <strong>overwrite</strong> our block. For example, if we define <code>y = a + b</code>, then <code>c = y</code> and <code>y = a</code>, the redefinition of <code>y</code> kills our previous definition of <code>c</code>, and thus block 3 <em>kills</em> block 2.</li>
+<li>\( reach_{in}(b) \) is the set of variables that are "reach-in", i.e. it is reachable in at least one predecessor</li>
+<li>\( reach_{out}(b) \) is the set of variables that are "reach-out", i.e. it is reachable by at least one successor</li>
+</ul>
+<p>In the same way we defined our liveness equations, here are the reachability equations:
+\[ reach_{in}(b) = \bigcup_{p \in pred(b)} reach_{out}(p) \]
+\[ reach_{out}(b) = gen(b) \cup (reach_{in}(b) - kill(b)) \]</p>
+<p>The notion of reachability allows us to compute <strong>available expressions</strong>. Available
+expressions are those that are in \( reach_{in}(b) - kill(b) \).</p>
+<h2 id="work-list-algorithm"><a class="header" href="#work-list-algorithm">Work list algorithm</a></h2>
+<p>Saturating sets in a naive way is <em>tedious</em>. Instead, we'd want to update sets only
+<em>when needed</em>. That's where the work list algorithm steps in!</p>
+<p>The idea goes as follows:</p>
+<ul>
+<li>create a set of blocks to recompute. At first, this set is filled with all blocks of our CFG.</li>
+<li>pick a block from the list, and compute its dataflow equation sets.</li>
+<li>if the sets change from before, add all of its successors/predecessors (depending on if you are going up or down the graph) to the set of blocks to recompute.</li>
+<li>repeat steps 2 and 3 until the set is empty</li>
+</ul>
+<blockquote>
+<p><strong>ASSIGNMENT</strong>: perform liveness and reachability analysis on your CFG using the work list
+algorithm.</p>
+</blockquote>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../lab3/end.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../lab2/ssa.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../lab4/constant_propagation.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../lab2/end.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -205,11 +253,11 @@ worse! But generally speaking, it works.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../lab3/end.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../lab2/ssa.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../lab4/constant_propagation.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../lab2/end.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

@@ -44,4 +44,4 @@ stack machine.
 We'll use a total of three intermediate representations:
 - the **AST**, which we already implemented
 - a **Control Flow Graph** with **Static Single Assignment** (SSA) form, which we'll implement in this lab
-- an **Abstract Stack Machine**, but we'll wait until we work on generating Uxn code for this one
+- a **Dependancy Graph** with an **Abstract Stack Machine**, but we'll wait until we work on generating Uxn code for this one

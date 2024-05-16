@@ -31,6 +31,8 @@
 
         <!-- Custom theme stylesheets -->
 
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     </head>
     <body class="sidebar-visible no-js">
     <div id="body-container">
@@ -89,7 +91,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="lua101.html"><strong aria-hidden="true">1.1.</strong> Lua 101</a></li><li class="chapter-item expanded "><a href="uxn101.html"><strong aria-hidden="true">1.2.</strong> Uxn 101</a></li></ol></li><li class="chapter-item expanded "><a href="lab1/index.html"><strong aria-hidden="true">2.</strong> Lab 01: Parsing Lua</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="lab1/lua_syntax.html"><strong aria-hidden="true">2.1.</strong> Lua's syntax</a></li><li class="chapter-item expanded "><a href="lab1/implementing_parser.html"><strong aria-hidden="true">2.2.</strong> Implementing the grammar in LALRPOP</a></li><li class="chapter-item expanded "><a href="lab1/pretty_printer.html"><strong aria-hidden="true">2.3.</strong> Pretty printing our AST</a></li><li class="chapter-item expanded "><a href="lab1/end.html"><strong aria-hidden="true">2.4.</strong> End of Lab 01</a></li></ol></li><li class="chapter-item expanded "><a href="lab2/index.html"><strong aria-hidden="true">3.</strong> Lab 02: Intermediate representation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="lab2/control_flow_graph.html"><strong aria-hidden="true">3.1.</strong> Constructing the CFG</a></li><li class="chapter-item expanded "><a href="lab2/ssa.html"><strong aria-hidden="true">3.2.</strong> The SSA form</a></li><li class="chapter-item expanded "><a href="lab2/end.html"><strong aria-hidden="true">3.3.</strong> End of Lab 02</a></li></ol></li><li class="chapter-item expanded "><a href="lab3/index.html"><strong aria-hidden="true">4.</strong> Lab 03: Producing a Uxn ROM</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="lab3/abstract_stack_machine.html"><strong aria-hidden="true">4.1.</strong> An abstract stack machine</a></li><li class="chapter-item expanded "><a href="lab3/end.html"><strong aria-hidden="true">4.2.</strong> End of Lab 03</a></li></ol></li><li class="chapter-item expanded "><a href="lab4/index.html"><strong aria-hidden="true">5.</strong> Bonus lab: Optimizations</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="lab4/constant_propagation.html"><strong aria-hidden="true">5.1.</strong> Constant propagation</a></li><li class="chapter-item expanded "><a href="lab4/dead_code_elimination.html"><strong aria-hidden="true">5.2.</strong> Dead code elimination</a></li><li class="chapter-item expanded "><a href="lab4/loops.html"><strong aria-hidden="true">5.3.</strong> Loop optimizations</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="lua101.html"><strong aria-hidden="true">1.1.</strong> Lua 101</a></li><li class="chapter-item expanded "><a href="uxn101.html"><strong aria-hidden="true">1.2.</strong> Uxn 101</a></li></ol></li><li class="chapter-item expanded "><a href="lab1/index.html"><strong aria-hidden="true">2.</strong> Lab 01: Parsing Lua</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="lab1/lua_syntax.html"><strong aria-hidden="true">2.1.</strong> Lua's syntax</a></li><li class="chapter-item expanded "><a href="lab1/implementing_parser.html"><strong aria-hidden="true">2.2.</strong> Implementing the grammar in LALRPOP</a></li><li class="chapter-item expanded "><a href="lab1/pretty_printer.html"><strong aria-hidden="true">2.3.</strong> Pretty printing our AST</a></li><li class="chapter-item expanded "><a href="lab1/end.html"><strong aria-hidden="true">2.4.</strong> End of Lab 01</a></li></ol></li><li class="chapter-item expanded "><a href="lab2/index.html"><strong aria-hidden="true">3.</strong> Lab 02: Intermediate representation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="lab2/control_flow_graph.html"><strong aria-hidden="true">3.1.</strong> Constructing the CFG</a></li><li class="chapter-item expanded "><a href="lab2/ssa.html"><strong aria-hidden="true">3.2.</strong> The SSA form</a></li><li class="chapter-item expanded "><a href="lab2/liveness_reachability.html"><strong aria-hidden="true">3.3.</strong> Liveness and reachability</a></li><li class="chapter-item expanded "><a href="lab2/end.html"><strong aria-hidden="true">3.4.</strong> End of Lab 02</a></li></ol></li><li class="chapter-item expanded "><a href="lab3/index.html"><strong aria-hidden="true">4.</strong> Lab 03: Producing a Uxn ROM</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="lab3/abstract_stack_machine.html"><strong aria-hidden="true">4.1.</strong> An abstract stack machine</a></li><li class="chapter-item expanded "><a href="lab3/end.html"><strong aria-hidden="true">4.2.</strong> End of Lab 03</a></li></ol></li><li class="chapter-item expanded "><a href="lab4/index.html"><strong aria-hidden="true">5.</strong> Bonus lab: Optimizations</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="lab4/constant_propagation.html"><strong aria-hidden="true">5.1.</strong> Constant propagation</a></li><li class="chapter-item expanded "><a href="lab4/dead_code_elimination.html"><strong aria-hidden="true">5.2.</strong> Dead code elimination</a></li><li class="chapter-item expanded "><a href="lab4/loops.html"><strong aria-hidden="true">5.3.</strong> Loop optimizations</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -635,7 +637,7 @@ stack machine.</p>
 <ul>
 <li>the <strong>AST</strong>, which we already implemented</li>
 <li>a <strong>Control Flow Graph</strong> with <strong>Static Single Assignment</strong> (SSA) form, which we'll implement in this lab</li>
-<li>an <strong>Abstract Stack Machine</strong>, but we'll wait until we work on generating Uxn code for this one</li>
+<li>a <strong>Dependancy Graph</strong> with an <strong>Abstract Stack Machine</strong>, but we'll wait until we work on generating Uxn code for this one</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="building-the-cfg"><a class="header" href="#building-the-cfg">Building the CFG</a></h1>
 <p>Alright, we have an AST ready for us to use, but it has made its time. Now, if we
@@ -807,8 +809,87 @@ our CFG, some blocks may not know all of their predecessors when reading a varia
 <p>We can seal a block when all of its successors were found. When sealing a block, we
 can resolve all of the empty phis inside it: after all, we know all of our predecessors
 now!</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="liveness-and-reachability-computations"><a class="header" href="#liveness-and-reachability-computations">Liveness and reachability computations</a></h1>
+<p>Now that we have a functional IR, it's time to do some calculations with it!</p>
+<p>The most common informations we'd want to grab from the IR are the notions of
+<strong>liveness</strong> and <strong>reachability</strong>. These are called <strong>dataflow equations</strong>.
+Let's first present what these are.</p>
+<h2 id="liveness"><a class="header" href="#liveness">Liveness</a></h2>
+<p>Liveness defines wether "this variable is needed in the future".</p>
+<p>In order to reason about this, we need to define a few properties of variables within
+a block:</p>
+<ul>
+<li>a variable is <strong>used</strong> in a block if its value is read.</li>
+<li>a variable is <strong>defined</strong> in a block if a value is written to it.</li>
+<li>variables can be <strong>live</strong> between two blocks if there is a path to a block where its used without any blocks where it is defined in between.</li>
+<li>a variable is called <strong>live-in</strong> in a block if is live in at least one transition to said block.</li>
+<li>a variable is called <strong>live-out</strong> in a block if it is live in at least one transition from this block.</li>
+</ul>
+<p>To ease things up, we'll often be talking about sets of variables verifying a property.
+For example, the \( used(b) \) set is the set of variables that are used in block \( b \).</p>
+<p>Computing liveness information is a matter of saturating the \( live_in \) and \( live_out \)
+sets for each block: we define set operations that make each of them grow, and
+stop when our sets are not changing anymore.</p>
+<p>Our set operations will be as follows:
+\[ live_{out}(b) = \bigcup_{s \in succ(b)} live_{in}(s) \]
+\[ live_{in}(b) = used(b) \cup (live_{out}(b) - defined(b)) \]</p>
+<blockquote>
+<p>You can either go up or down your graph when saturating the set.
+Going up (from the leaves to the root) is faster, as the main computation comes
+from updating the \( out \) set from successors: if liveness for successors
+is already fully computed, this is way easier to do!</p>
+</blockquote>
+<h2 id="reachability"><a class="header" href="#reachability">Reachability</a></h2>
+<p>Reachability answers the question of "does assigning to variable \( x \) impact
+the value of \( y \) in the future?"</p>
+<p>We generate three more sets describing our variables in a block \( b \):</p>
+<ul>
+<li>\( gen(b) \) is the set of definitions <strong>generated</strong> in our block.</li>
+<li>\( kill(b) \) is the set of blocks that <strong>overwrite</strong> our block. For example, if we define <code>y = a + b</code>, then <code>c = y</code> and <code>y = a</code>, the redefinition of <code>y</code> kills our previous definition of <code>c</code>, and thus block 3 <em>kills</em> block 2.</li>
+<li>\( reach_{in}(b) \) is the set of variables that are "reach-in", i.e. it is reachable in at least one predecessor</li>
+<li>\( reach_{out}(b) \) is the set of variables that are "reach-out", i.e. it is reachable by at least one successor</li>
+</ul>
+<p>In the same way we defined our liveness equations, here are the reachability equations:
+\[ reach_{in}(b) = \bigcup_{p \in pred(b)} reach_{out}(p) \]
+\[ reach_{out}(b) = gen(b) \cup (reach_{in}(b) - kill(b)) \]</p>
+<p>The notion of reachability allows us to compute <strong>available expressions</strong>. Available
+expressions are those that are in \( reach_{in}(b) - kill(b) \).</p>
+<h2 id="work-list-algorithm"><a class="header" href="#work-list-algorithm">Work list algorithm</a></h2>
+<p>Saturating sets in a naive way is <em>tedious</em>. Instead, we'd want to update sets only
+<em>when needed</em>. That's where the work list algorithm steps in!</p>
+<p>The idea goes as follows:</p>
+<ul>
+<li>create a set of blocks to recompute. At first, this set is filled with all blocks of our CFG.</li>
+<li>pick a block from the list, and compute its dataflow equation sets.</li>
+<li>if the sets change from before, add all of its successors/predecessors (depending on if you are going up or down the graph) to the set of blocks to recompute.</li>
+<li>repeat steps 2 and 3 until the set is empty</li>
+</ul>
+<blockquote>
+<p><strong>ASSIGNMENT</strong>: perform liveness and reachability analysis on your CFG using the work list
+algorithm.</p>
+</blockquote>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="end-of-lab-02"><a class="header" href="#end-of-lab-02">End of Lab 02</a></h1>
+<p>Let's review what we've done so far:</p>
+<ul>
+<li>our AST has been transformed into a CFG, making it easier for us to reason about our program's flow.</li>
+<li>our CFG contains blocks filled with a so-called SSA form. This makes every other algorithm we'll implement in the future easier to deal with!</li>
+<li>we have derived information about liveness and reachability from our CFG.</li>
+</ul>
+<p>The last point will be especially relevant <a href="lab2/./lab4/index.html">if we try to optimize our generated code</a>.
+Notably, reachability helps with common subexpression elimination, and liveness with
+dead-code elimination.</p>
+<p>But before we talk about that, let's generate some Uxn code, shall we?</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="lab-03-producing-a-uxn-rom"><a class="header" href="#lab-03-producing-a-uxn-rom">Lab 03: Producing a Uxn ROM</a></h1>
+<p>Phew, this was tedious, but we now have a complete intermediate representation
+of our Lua program that is way lower level then when we began. I think we're ready
+to create some Uxn code from that, aren't we?</p>
+<p>Most of this lab is inspired heavily by Mark Shannon's Master's thesis, "A C Compiler
+for Stack Machines". Obviously, we won't implement an entire thesis during this lab,
+but the main ideas will stay.</p>
+<h2 id="what-do-we-need"><a class="header" href="#what-do-we-need">What do we need?</a></h2>
+<p>We'll be using an <strong>abstract stack machine</strong> (ASM for short) using the <em>stack-region
+framework</em> presented in Mark Shannon's thesis. This will allow us to reason about
+how we would access our values within a real Uxn machine.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="an-abstract-stack-machine"><a class="header" href="#an-abstract-stack-machine">An abstract stack machine</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="end-of-lab-03"><a class="header" href="#end-of-lab-03">End of Lab 03</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="bonus-lab-optimizations"><a class="header" href="#bonus-lab-optimizations">Bonus lab: Optimizations</a></h1>
@@ -907,7 +988,9 @@ this result once, store it in a variable, and reuse it when needed.</p>
 
         <script>
         window.addEventListener('load', function() {
-            window.setTimeout(window.print, 100);
+            MathJax.Hub.Register.StartupHook('End', function() {
+                window.setTimeout(window.print, 100);
+            });
         });
         </script>
 

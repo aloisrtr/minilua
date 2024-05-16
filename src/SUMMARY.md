@@ -13,6 +13,7 @@
 - [Lab 02: Intermediate representation](./lab2/README.md)
   - [Constructing the CFG](./lab2/control_flow_graph.md)
   - [The SSA form](./lab2/ssa.md)
+  - [Liveness and reachability](./lab2/liveness_reachability.md)
   - [End of Lab 02](./lab2/end.md)
 
 - [Lab 03: Producing a Uxn ROM](./lab3/README.md)
